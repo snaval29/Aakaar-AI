@@ -1,0 +1,27 @@
+
+.app {
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  color: #f2f5f4;
+  background: #0b0b0c;
+}
+
+.screen {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
