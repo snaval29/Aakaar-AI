@@ -1,0 +1,333 @@
+.scale-page {
+  min-height: 100vh;
+  padding: 0 24px 48px;
+  color: #f5f5f5;
+  background: #0b0b0b;
+  font-family: "Inter", sans-serif;
+}
+
+.scale-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1000px;
+  min-height: 64px;
+  margin: 0 auto;
+  border-bottom: 1px solid #ffffff18;
+}
+
+.scale-back {
+  color: #a0a0a0;
+  background: transparent;
+  border: 0;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.scale-back:hover {
+  color: #ffffff;
+}
+
+.scale-brand {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.scale-brand span {
+  margin-left: 4px;
+  color: #999999;
+}
+
+.scale-content {
+  max-width: 680px;
+  margin: 48px auto 0;
+}
+
+.scale-eyebrow {
+  color: #2563eb;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.scale-content h1 {
+  margin: 16px 0;
+  color: #f5f5f5;
+  font-size: 40px;
+  font-weight: 500;
+  letter-spacing: -1.5px;
+  line-height: 1.2;
+}
+
+.scale-content h1 span {
+  color: #999999;
+}
+
+.scale-description,
+.scale-hint {
+  color: #999999;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.scale-content form {
+  margin-top: 32px;
+}
+
+.scale-card {
+  padding: 24px;
+  margin-bottom: 24px;
+  background: linear-gradient(145deg, #ffffff08, #ffffff02);
+  border: 1px solid #ffffff18;
+  border-radius: 12px;
+}
+
+.scale-card h2 {
+  margin: 0;
+  color: #f5f5f5;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.scale-hint {
+  margin: 16px 0 24px;
+}
+
+.scale-upload {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  min-height: 160px;
+  padding: 24px;
+  color: #f5f5f5;
+  text-align: center;
+  cursor: pointer;
+  background: #080808;
+  border: 1px dashed #555555;
+  border-radius: 8px;
+  transition: border-color 180ms ease, background 180ms ease;
+}
+
+.scale-upload:hover {
+  border-color: #2563eb;
+  background: #2563eb0a;
+}
+
+.scale-upload input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.scale-upload:focus-within {
+  outline: 2px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.scale-upload-icon {
+  color: #2563eb;
+  font-size: 32px;
+}
+
+.scale-upload strong {
+  overflow-wrap: anywhere;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.scale-upload > span:last-child {
+  color: #999999;
+  font-size: 16px;
+}
+
+.scale-file-info,
+.scale-meter-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.scale-file-info {
+  flex-wrap: wrap;
+  margin-top: 16px;
+  color: #999999;
+  font-size: 16px;
+}
+
+.scale-file-info strong {
+  color: #ffffff;
+  overflow-wrap: anywhere;
+}
+
+.scale-time-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr);
+  gap: 16px;
+  align-items: end;
+}
+
+.scale-time-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.scale-time-fields label span {
+  color: #999999;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.scale-time-fields input {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 8px 16px;
+  color: #ffffff;
+  background: #080808;
+  border: 1px solid #ffffff25;
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+}
+
+.scale-time-fields input:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+  border-color: #2563eb;
+}
+
+.scale-time-arrow {
+  padding-bottom: 12px;
+  color: #2563eb;
+  text-align: center;
+  font-size: 24px;
+}
+
+.scale-meter {
+  margin-top: 24px;
+}
+
+.scale-meter-label {
+  color: #999999;
+  font-size: 16px;
+}
+
+.scale-meter-label strong {
+  color: #ffffff;
+}
+
+.scale-meter-track {
+  height: 8px;
+  margin-top: 16px;
+  overflow: hidden;
+  background: #ffffff18;
+  border-radius: 4px;
+}
+
+.scale-meter-fill {
+  height: 100%;
+  background: #2563eb;
+  border-radius: 4px;
+  transition: width 180ms ease;
+}
+
+.scale-meter p {
+  color: #999999;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.scale-error {
+  padding: 16px;
+  color: #ffffff;
+  background: #1b1b1b;
+  border: 1px solid #666666;
+  border-radius: 8px;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.scale-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 56px;
+  padding: 16px 24px;
+  color: #ffffff;
+  background: #2563eb;
+  border: 1px solid #2563eb;
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.scale-primary:hover:not(:disabled) {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.scale-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.scale-primary:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 4px;
+}
+
+.scale-footnote {
+  margin-top: 16px;
+  color: #999999;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .scale-page {
+    padding: 0 16px 32px;
+  }
+
+  .scale-content {
+    margin-top: 32px;
+  }
+
+  .scale-content h1 {
+    font-size: 32px;
+    letter-spacing: -1px;
+  }
+
+  .scale-card {
+    padding: 16px;
+  }
+
+  .scale-time-fields {
+    gap: 8px;
+  }
+
+  .scale-time-fields input {
+    padding: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scale-upload,
+  .scale-meter-fill,
+  .scale-primary {
+    transition: none;
+  }
+}

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import "./FeatureSelection.css";
 
@@ -7,12 +8,14 @@ const features = [
     title: "Text to Music",
     description: "Turn your words into music.",
     icon: "music",
+    status: "Available",
   },
   {
-    id: "explore",
-    title: "Explore More",
-    description: "Discover new creative possibilities.",
-    icon: "explore",
+    id: "scale",
+    title: "Music Scale Predictor",
+    description: "Discover the notes behind song lyrics.",
+    icon: "scale",
+    status: "New feature",
   },
 ];
 
@@ -52,13 +55,32 @@ function FeatureIcon({ type }) {
   return (
     <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
       <path
-        d="M24 5L28.5 19.5L43 24L28.5 28.5L24 43L19.5 28.5L5 24L19.5 19.5L24 5Z"
+        d="M29 8V29M29 8L40 5V25"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.7"
+        strokeLinecap="round"
         strokeLinejoin="round"
       />
+      <ellipse
+        cx="23"
+        cy="31"
+        rx="6"
+        ry="4"
+        transform="rotate(-18 23 31)"
+        stroke="currentColor"
+        strokeWidth="1.7"
+      />
+      <ellipse
+        cx="34"
+        cy="27"
+        rx="6"
+        ry="4"
+        transform="rotate(-18 34 27)"
+        stroke="currentColor"
+        strokeWidth="1.7"
+      />
       <path
-        d="M38 4V12M34 8H42"
+        d="M7 12V36M12 17V31M17 21V27"
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
@@ -68,14 +90,11 @@ function FeatureIcon({ type }) {
 }
 
 export default function FeatureSelection({ onSelectFeature }) {
-  const [selected, setSelected] = useState("music");
+  const [selected, setSelected] = useState(null);
 
   function handleFeatureClick(feature) {
     setSelected(feature.id);
-
-    if (feature.id === "music") {
-      onSelectFeature();
-    }
+    onSelectFeature(feature.id);
   }
 
   return (
@@ -119,7 +138,6 @@ export default function FeatureSelection({ onSelectFeature }) {
               }`}
               onClick={() => handleFeatureClick(feature)}
               aria-pressed={selected === feature.id}
-              disabled={feature.id === "explore"}
             >
               <div className="feature-icon">
                 <FeatureIcon type={feature.icon} />
@@ -129,6 +147,9 @@ export default function FeatureSelection({ onSelectFeature }) {
                 <div>
                   <h2>{feature.title}</h2>
                   <p>{feature.description}</p>
+                  <span className="feature-status">
+                    {feature.status}
+                  </span>
                 </div>
 
                 <span className="feature-arrow" aria-hidden="true">

@@ -1,5 +1,4 @@
 
-import { useEffect, useState } from "react";
 import "./WorkflowScreens.css";
 
 function Brand() {
@@ -10,7 +9,9 @@ function Brand() {
         <span />
         <span />
       </span>
-      <span>Aakaar<span className="brand-ai">AI</span></span>
+      <span>
+        Aakaar<span className="brand-ai">AI</span>
+      </span>
     </div>
   );
 }
@@ -49,6 +50,9 @@ function WorkflowLayout({ onBack, children }) {
 export function CreateMusicScreen({
   prompt,
   setPrompt,
+  duration,
+  setDuration,
+  error,
   onBack,
   onGenerate,
 }) {
@@ -56,9 +60,7 @@ export function CreateMusicScreen({
 
   return (
     <WorkflowLayout onBack={onBack}>
-      <div className="workflow-eyebrow">
-        TEXT TO MUSIC
-      </div>
+      <div className="workflow-eyebrow">TEXT TO MUSIC</div>
 
       <h1 className="workflow-title">
         Describe your sound.
@@ -96,6 +98,29 @@ export function CreateMusicScreen({
           <span>{prompt.length}/{maxLength}</span>
         </div>
 
+        <label className="prompt-label" htmlFor="music-duration">
+          DURATION
+        </label>
+
+        <select
+          id="music-duration"
+          className="music-prompt"
+          value={duration}
+          onChange={(event) => setDuration(Number(event.target.value))}
+        >
+          {[5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((seconds) => (
+            <option key={seconds} value={seconds}>
+              {seconds} seconds
+            </option>
+          ))}
+        </select>
+
+        {error && (
+          <p role="alert" className="generation-error">
+            {error}
+          </p>
+        )}
+
         <button
           type="submit"
           className="workflow-primary-button"
@@ -109,38 +134,13 @@ export function CreateMusicScreen({
   );
 }
 
-export function GenerationLoadingScreen({ onBack, onComplete }) {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const duration = 4000;
-    const startTime = performance.now();
-    let frameId;
-
-    function update(now) {
-      const elapsed = now - startTime;
-      const next = Math.min(
-        100,
-        Math.floor((elapsed / duration) * 100)
-      );
-
-      setProgress(next);
-
-      if (elapsed >= duration) {
-        onComplete(null);
-      } else {
-        frameId = requestAnimationFrame(update);
-      }
-    }
-
-    frameId = requestAnimationFrame(update);
-
-    return () => cancelAnimationFrame(frameId);
-  }, [onComplete]);
-
+export function GenerationLoadingScreen({ onBack }) {
   return (
     <WorkflowLayout onBack={onBack}>
-      <div className="loading-visual" aria-hidden="true">
+      <div
+        className="loading-visual"
+        aria-hidden="true"
+      >
         <div className="loading-orbit orbit-one" />
         <div className="loading-orbit orbit-two" />
         <div className="loading-core">
@@ -156,18 +156,18 @@ export function GenerationLoadingScreen({ onBack, onComplete }) {
         Creating your sound.
       </h1>
 
-      <p className="workflow-description">
-        Turning your words into music.
+      <p className="workflow-description" role="status">
+        MusicGen is generating your music. This may take a few minutes.
       </p>
 
       <div className="generation-progress">
         <div className="generation-progress-track">
           <div
             className="generation-progress-fill"
-            style={{ width: `${progress}%` }}
+            style={{ width: "65%" }}
           />
         </div>
-        <span>{progress}%</span>
+        <span>Working</span>
       </div>
     </WorkflowLayout>
   );
@@ -176,6 +176,7 @@ export function GenerationLoadingScreen({ onBack, onComplete }) {
 export function AudioOutputScreen({
   prompt,
   audioUrl,
+  downloadUrl,
   onBack,
   onCreateAnother,
 }) {
@@ -208,42 +209,40 @@ export function AudioOutputScreen({
 
         <div className="audio-details">
           <h2>Untitled composition</h2>
-          <p>AI-generated music</p>
+          <p>AI-generated music · WAV audio</p>
         </div>
 
         {audioUrl ? (
           <>
-            <audio
-              className="audio-player"
-              controls
-              src={audioUrl}
-            >
-              Your browser does not support audio playback.
-            </audio>
+<audio
+  className="audio-player"
+  controls
+  preload="metadata"
+  crossOrigin="anonymous"
+  src={audioUrl}
+  onError={(event) => {
+    console.error(
+      "Audio playback error:",
+      event.currentTarget.error,
+      audioUrl
+    );
+  }}
+>
+  Your browser does not support audio playback.
+</audio>
 
             <a
               className="workflow-primary-button download-button"
-              href={audioUrl}
-              download="aakaar-ai-composition.mp3"
+              href={downloadUrl || audioUrl}
             >
-              <span>Download audio</span>
+              <span>Download audio (.wav)</span>
               <span aria-hidden="true">↓</span>
             </a>
           </>
         ) : (
-          <div className="audio-unavailable">
-            <p>
-              Your audio player will appear here when the music
-              generator is connected.
-            </p>
-            <button
-              type="button"
-              className="workflow-primary-button"
-              disabled
-            >
-              Audio not connected yet
-            </button>
-          </div>
+          <p role="alert" className="generation-error">
+            No audio URL was returned. Please generate your music again.
+          </p>
         )}
       </div>
 
@@ -255,9 +254,7 @@ export function AudioOutputScreen({
         Create another
       </button>
 
-      <p className="output-prompt">
-        {prompt}
-      </p>
+      <p className="output-prompt">{prompt}</p>
     </WorkflowLayout>
   );
 }
