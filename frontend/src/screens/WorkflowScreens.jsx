@@ -29,9 +29,9 @@ function BackButton({ onClick, label = "Back" }) {
   );
 }
 
-function WorkflowLayout({ onBack, children }) {
+function WorkflowLayout({ onBack, children, ariaBusy }) {
   return (
-    <main className="screen workflow-screen">
+    <main className="screen workflow-screen" aria-busy={ariaBusy || undefined}>
       <div className="workflow-grid" aria-hidden="true" />
 
       <header className="workflow-header">
@@ -57,6 +57,7 @@ export function CreateMusicScreen({
   onGenerate,
 }) {
   const maxLength = 500;
+  const errorId = "music-error";
 
   return (
     <WorkflowLayout onBack={onBack}>
@@ -91,6 +92,8 @@ export function CreateMusicScreen({
           placeholder="A calm piano melody with warm strings, soft rain, and a cinematic atmosphere..."
           maxLength={maxLength}
           required
+          aria-describedby={error ? errorId : undefined}
+          aria-invalid={error ? "true" : undefined}
         />
 
         <div className="prompt-footer">
@@ -104,7 +107,7 @@ export function CreateMusicScreen({
 
         <select
           id="music-duration"
-          className="music-prompt"
+          className="music-select"
           value={duration}
           onChange={(event) => setDuration(Number(event.target.value))}
         >
@@ -116,7 +119,7 @@ export function CreateMusicScreen({
         </select>
 
         {error && (
-          <p role="alert" className="generation-error">
+          <p id={errorId} role="alert" className="generation-error">
             {error}
           </p>
         )}
@@ -136,7 +139,7 @@ export function CreateMusicScreen({
 
 export function GenerationLoadingScreen({ onBack }) {
   return (
-    <WorkflowLayout onBack={onBack}>
+    <WorkflowLayout onBack={onBack} ariaBusy="true">
       <div
         className="loading-visual"
         aria-hidden="true"
@@ -156,19 +159,20 @@ export function GenerationLoadingScreen({ onBack }) {
         Creating your sound.
       </h1>
 
-      <p className="workflow-description" role="status">
+      <p className="workflow-description" role="status" aria-live="polite">
         MusicGen is generating your music. This may take a few minutes.
       </p>
 
-      <div className="generation-progress">
+      <div className="generation-progress" aria-label="Generation in progress">
         <div className="generation-progress-track">
-          <div
-            className="generation-progress-fill"
-            style={{ width: "65%" }}
-          />
+          <div className="generation-progress-fill generation-progress-indeterminate" />
         </div>
         <span>Working</span>
       </div>
+
+      <p className="generation-cancel-hint">
+        You can go back to cancel.
+      </p>
     </WorkflowLayout>
   );
 }
@@ -214,26 +218,27 @@ export function AudioOutputScreen({
 
         {audioUrl ? (
           <>
-<audio
-  className="audio-player"
-  controls
-  preload="metadata"
-  crossOrigin="anonymous"
-  src={audioUrl}
-  onError={(event) => {
-    console.error(
-      "Audio playback error:",
-      event.currentTarget.error,
-      audioUrl
-    );
-  }}
->
-  Your browser does not support audio playback.
-</audio>
+            <audio
+              className="audio-player"
+              controls
+              preload="metadata"
+              src={audioUrl}
+              onError={(event) => {
+                console.error(
+                  "Audio playback error:",
+                  event.currentTarget.error,
+                  audioUrl
+                );
+              }}
+            >
+              Your browser does not support audio playback.
+            </audio>
 
             <a
               className="workflow-primary-button download-button"
               href={downloadUrl || audioUrl}
+              download="aakaar-music.wav"
+              rel="noreferrer"
             >
               <span>Download audio (.wav)</span>
               <span aria-hidden="true">↓</span>

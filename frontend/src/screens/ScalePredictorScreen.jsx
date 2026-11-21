@@ -26,6 +26,7 @@ export default function ScalePredictorScreen({ onBack, onAnalyze }) {
   const [start, setStart] = useState("00:00");
   const [end, setEnd] = useState("00:30");
   const [error, setError] = useState("");
+  const errorId = "scale-error-msg";
 
   function handleFile(event) {
     const selected = event.target.files?.[0];
@@ -105,11 +106,23 @@ export default function ScalePredictorScreen({ onBack, onAnalyze }) {
     });
   }
 
-  const segmentSeconds = toSeconds(end) - toSeconds(start);
+  const startSeconds = toSeconds(start);
+  const endSeconds = toSeconds(end);
+  const segmentSeconds =
+    Number.isFinite(startSeconds) && Number.isFinite(endSeconds)
+      ? endSeconds - startSeconds
+      : NaN;
 
   const meterWidth = Number.isFinite(segmentSeconds)
     ? Math.min(100, Math.max(0, (segmentSeconds / 120) * 100))
     : 0;
+
+  const hasTimeError =
+    error &&
+    (error.includes("MM:SS") ||
+      error.includes("start") ||
+      error.includes("end") ||
+      error.includes("exceed"));
 
   return (
     <main className="screen scale-page">
@@ -135,7 +148,7 @@ export default function ScalePredictorScreen({ onBack, onAnalyze }) {
           you want to explore.
         </p>
 
-        <form onSubmit={submit}>
+        <form onSubmit={submit} aria-describedby={error ? errorId : undefined} noValidate>
           <section className="scale-card">
             <h2>01. Upload audio</h2>
 
@@ -148,9 +161,10 @@ export default function ScalePredictorScreen({ onBack, onAnalyze }) {
                 type="file"
                 accept="audio/*"
                 onChange={handleFile}
+                aria-label="Upload audio file"
               />
 
-              <span className="scale-upload-icon">♫</span>
+              <span className="scale-upload-icon" aria-hidden="true">♫</span>
 
               <strong>
                 {file ? file.name : "Choose an audio file"}
@@ -180,22 +194,32 @@ export default function ScalePredictorScreen({ onBack, onAnalyze }) {
               <label>
                 <span>START TIME</span>
                 <input
+                  type="text"
+                  inputMode="numeric"
                   value={start}
                   onChange={(event) => setStart(event.target.value)}
                   placeholder="00:00"
                   aria-label="Start time in MM:SS"
+                  aria-invalid={hasTimeError ? "true" : undefined}
+                  aria-describedby={hasTimeError ? errorId : undefined}
+                  pattern="\d{2,}:\d{2}"
                 />
               </label>
 
-              <span className="scale-time-arrow">→</span>
+              <span className="scale-time-arrow" aria-hidden="true">→</span>
 
               <label>
                 <span>END TIME</span>
                 <input
+                  type="text"
+                  inputMode="numeric"
                   value={end}
                   onChange={(event) => setEnd(event.target.value)}
                   placeholder="01:30"
                   aria-label="End time in MM:SS"
+                  aria-invalid={hasTimeError ? "true" : undefined}
+                  aria-describedby={hasTimeError ? errorId : undefined}
+                  pattern="\d{2,}:\d{2}"
                 />
               </label>
             </div>
@@ -211,7 +235,18 @@ export default function ScalePredictorScreen({ onBack, onAnalyze }) {
                 </strong>
               </div>
 
-              <div className="scale-meter-track">
+              <div
+                className="scale-meter-track"
+                role="progressbar"
+                aria-valuemin={0}
+                aria-valuemax={120}
+                aria-valuenow={
+                  Number.isFinite(segmentSeconds) && segmentSeconds >= 0
+                    ? Math.min(segmentSeconds, 120)
+                    : 0
+                }
+                aria-label="Selected segment duration"
+              >
                 <div
                   className="scale-meter-fill"
                   style={{ width: `${meterWidth}%` }}
@@ -223,13 +258,13 @@ export default function ScalePredictorScreen({ onBack, onAnalyze }) {
           </section>
 
           {error && (
-            <p className="scale-error" role="alert">
+            <p id={errorId} className="scale-error" role="alert">
               {error}
             </p>
           )}
 
           <button className="scale-primary" type="submit">
-            Continue to lyrics and notes <span>→</span>
+            Continue to lyrics and notes <span aria-hidden="true">→</span>
           </button>
 
           <p className="scale-footnote">

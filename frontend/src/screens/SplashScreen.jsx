@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./SplashScreen.css";
 
 export default function SplashScreen({ onComplete }) {
   const [progress, setProgress] = useState(0);
+  // Stable ref so the effect never re-runs when parent re-renders
+  const onCompleteRef = useRef(onComplete);
+  useEffect(() => { onCompleteRef.current = onComplete; });
 
   useEffect(() => {
     const duration = 4500;
@@ -20,7 +23,7 @@ export default function SplashScreen({ onComplete }) {
 
       if (elapsed >= duration) {
         setProgress(100);
-        onComplete();
+        onCompleteRef.current();
       } else {
         frameId = requestAnimationFrame(updateProgress);
       }
@@ -29,7 +32,8 @@ export default function SplashScreen({ onComplete }) {
     frameId = requestAnimationFrame(updateProgress);
 
     return () => cancelAnimationFrame(frameId);
-  }, [onComplete]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run only once on mount
 
   return (
     <main className="screen splash">
